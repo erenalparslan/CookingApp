@@ -1,5 +1,6 @@
 package com.erenalparslan.cookingapp
 
+import ProfileScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -30,13 +31,15 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.erenalparslan.cookingapp.presentation.addRecipe.AddRecipeScreen
+import com.erenalparslan.cookingapp.presentation.cook.CookScreen
 import com.erenalparslan.cookingapp.presentation.favorites.FavoritesScreen
 import com.erenalparslan.cookingapp.presentation.home.HomeScreen
-import com.erenalparslan.cookingapp.presentation.profile.ProfileScreen
 import com.erenalparslan.cookingapp.presentation.search.SearchScreen
 import com.erenalparslan.cookingapp.ui.theme.CookingAppTheme
 import com.erenalparslan.cookingapp.util.Screen
@@ -67,8 +70,8 @@ class MainActivity : ComponentActivity() {
                                 navController = navController, startDestination = Screen.Home.route
                             ) {
                                 // Home screen
-                                composable(Screen.Home.route) {
-                                    HomeScreen()
+                                composable(Screen.Home.route)  {
+                                    HomeScreen(navController)
                                 }
                                 // Search screen
                                 composable(Screen.Search.route) {
@@ -85,6 +88,12 @@ class MainActivity : ComponentActivity() {
                                 // Login screen
                                 composable(Screen.Profile.route) {
                                     ProfileScreen()
+                                }
+                                composable(Screen.Cook.route+ "/{cookName}",
+                                    arguments = listOf(
+                                        navArgument("cookName") { type = NavType.StringType }
+                                    )) {
+                                    CookScreen()
                                 }
                             }
                         }
