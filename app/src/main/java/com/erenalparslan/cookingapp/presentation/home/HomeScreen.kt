@@ -1,7 +1,6 @@
 package com.erenalparslan.cookingapp.presentation.home
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +25,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,44 +38,44 @@ import com.erenalparslan.cookingapp.util.Screen
 @Composable
 fun HomeScreen(navController: NavHostController? = null) {
     val menuItems = listOf(
-        Pair(R.drawable.soup, stringResource(R.string.soup)),
-        Pair(R.drawable.main_food, stringResource(R.string.main_course)),
-        Pair(R.drawable.sweet, stringResource(R.string.dessert)),
-        Pair(R.drawable.drink, stringResource(R.string.drink))
+        Triple(R.drawable.soup, stringResource(R.string.soup),"corba"),
+        Triple(R.drawable.main_food, stringResource(R.string.main_course),"ana-yemek"),
+        Triple(R.drawable.dessert, stringResource(R.string.dessert),"tatli"),
+        Triple(R.drawable.drink, stringResource(R.string.drink),"icecek")
     )
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val itemHeight = (screenHeight / 2 - 104.dp)
     Surface(
         modifier = Modifier.fillMaxHeight(),
 
-    ) {
+        ) {
         Column(
             modifier = Modifier.fillMaxHeight()
         ) {
             Text(
                 text = stringResource(R.string.home_page),
-                fontSize = 32.sp,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(16.dp)
+                    .padding(8.dp)
             )
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 modifier = Modifier
                     .fillMaxHeight()
-                    .padding(horizontal = 8.dp, vertical = 16.dp),
-                verticalArrangement = Arrangement.SpaceAround
+                    .padding(horizontal = 8.dp, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(menuItems.size) { index ->
                     val menuItem = menuItems[index]
                     //TODO buradaki height ve diğer şeyler tekrar ayarlanacak.
-                    Card(
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .fillMaxWidth()
-                            .height(itemHeight),
-                        onClick = { navController?.navigate(Screen.Cook.route + "/${menuItem.second}") }
-                    ) {
+                    Card(modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
+                        .height(itemHeight),
+                        onClick = { navController?.navigate(Screen.Cook.route + "/${menuItem.third}") }) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth() // Fill the width of the parent
@@ -87,7 +87,7 @@ fun HomeScreen(navController: NavHostController? = null) {
                             Image(
                                 modifier = Modifier
                                     .fillMaxSize() // Fill the entire Box
-                                    .clip(RoundedCornerShape(22.dp)),
+                                    .clip(RoundedCornerShape(16.dp)),
                                 painter = painterResource(id = menuItem.first),
                                 contentDescription = menuItem.second,
                                 contentScale = ContentScale.Crop,
@@ -97,11 +97,12 @@ fun HomeScreen(navController: NavHostController? = null) {
                             Text(
                                 text = menuItem.second,
                                 color = Color.Black,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier
-                                    .padding(16.dp) // Padding around the text
-                                    .background(Color.White) // Background color behind the text
-                                    .align(Alignment.BottomCenter) // Align text to the bottom center
+                                    .padding(12.dp) // Padding around the text
+                                    .align(Alignment.Center) // Align text to the bottom center
                                     .fillMaxWidth(), // Fill the width of the parent
                             )
                         }

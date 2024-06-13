@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -40,7 +41,11 @@ import com.erenalparslan.cookingapp.presentation.addRecipe.AddRecipeScreen
 import com.erenalparslan.cookingapp.presentation.cook.CookScreen
 import com.erenalparslan.cookingapp.presentation.favorites.FavoritesScreen
 import com.erenalparslan.cookingapp.presentation.home.HomeScreen
-import com.erenalparslan.cookingapp.presentation.search.SearchScreen
+import com.erenalparslan.cookingapp.presentation.making.RecipeMakingScreen
+import com.erenalparslan.cookingapp.presentation.profile.LoginScreen
+import com.erenalparslan.cookingapp.presentation.profile.RegisterScreen
+import com.erenalparslan.cookingapp.presentation.profile.viewmodel.ProfileViewModel
+import com.erenalparslan.cookingapp.presentation.recipeDetail.RecipeDetailScreen
 import com.erenalparslan.cookingapp.ui.theme.CookingAppTheme
 import com.erenalparslan.cookingapp.util.Screen
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,6 +61,8 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
+                    val viewModel=hiltViewModel<MainActivityViewModel>()
+
                     val navController = rememberNavController()
                     Scaffold(bottomBar = { BottomNavigationBar(bottomNavController = navController) }) {
 
@@ -70,12 +77,12 @@ class MainActivity : ComponentActivity() {
                                 navController = navController, startDestination = Screen.Home.route
                             ) {
                                 // Home screen
-                                composable(Screen.Home.route)  {
+                                composable(Screen.Home.route) {
                                     HomeScreen(navController)
                                 }
                                 // Search screen
                                 composable(Screen.Search.route) {
-                                    SearchScreen()
+                                    CookScreen(navController, true)
                                 }
                                 // Recipe screen
                                 composable(Screen.AddRecipe.route) {
@@ -87,14 +94,33 @@ class MainActivity : ComponentActivity() {
                                 }
                                 // Login screen
                                 composable(Screen.Profile.route) {
-                                    ProfileScreen()
+                                    ProfileScreen(navController)
                                 }
-                                composable(Screen.Cook.route+ "/{cookName}",
+                                composable(Screen.Cook.route + "/{cookName}",
                                     arguments = listOf(
                                         navArgument("cookName") { type = NavType.StringType }
                                     )) {
-                                    CookScreen()
+                                    CookScreen(navController)
                                 }
+                                composable(Screen.Details.route + "/{id}",
+                                    arguments = listOf(
+                                        navArgument("id") { type = NavType.IntType }
+                                    )) {
+                                    RecipeDetailScreen(navController)
+                                }
+                                composable(Screen.Login.route) {
+                                    LoginScreen(navController)
+                                }
+                                composable(Screen.Register.route) {
+                                    RegisterScreen(navController)
+                                }
+                                composable(Screen.Making.route + "/{id}",
+                                    arguments = listOf(
+                                        navArgument("id") { type = NavType.IntType }
+                                    )) {
+                                    RecipeMakingScreen(navController)
+                                }
+
                             }
                         }
                     }
